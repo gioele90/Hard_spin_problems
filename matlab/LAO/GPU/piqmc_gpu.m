@@ -1,4 +1,4 @@
-function [ solution ] = piqmc(spin_start, HParams, monte_steps, trotter_slices, G_start, Temperature, step_flips)
+function [ solution ] = piqmc_gpu(spin_start, HParams, monte_steps, trotter_slices, G_start, Temperature, step_flips)
     
     [h, Jzz, Jxx, Jzzz, Jxxx,Jzzzz,Jxxxx] = deal(HParams{:});
     
@@ -17,10 +17,10 @@ function [ solution ] = piqmc(spin_start, HParams, monte_steps, trotter_slices, 
     % Create updated variables of instantaneous spin configy
     spin_config = start_spin_config;
     
-    G = G_start;
-    P = trotter_slices;
-    T = Temperature;
-    step_value = (G_start - (0.00000001))/monte_steps;
+    G = gpuArray(G_start);
+    P = gpuArray(trotter_slices);
+    T = gpuArray(Temperature);
+    step_value = gpuArray((G_start - (0.00000001))/monte_steps);
     
 %     energyFunction = buildEnergyFunction(h, Jzz, Jzzz)
 %     
@@ -48,17 +48,17 @@ function [ solution ] = piqmc(spin_start, HParams, monte_steps, trotter_slices, 
                 %sprintf('slice=%d',slice)
                 % Create variables to store new energy and configuration
                 new_spin_config = spin_config;
-                indices_to_flip = randperm(n, step_flips).';
+                indices_to_flip = gpuArray.randperm(n, step_flips).';
                 %flip local spin
                 for flip = 1:length(indices_to_flip)
                     new_spin_config(slice,indices_to_flip(flip)) = -new_spin_config(slice,indices_to_flip(flip));
                 end
 %               
 %               Calculate Energy Change
-                ediff = energyChange(new_spin_config, indices_to_flip, trotter_slices, J_orth, slice, h, Jzz, Jzzz,Jzzzz);
+                ediff = energyChange_gpu(new_spin_config, indices_to_flip, trotter_slices, J_orth, slice, h, Jzz, Jzzz,Jzzzz);
                 p_t = tran_prob(0,0,ediff, trotter_slices, Temperature, n, G);
-                x_1 = rand;
-                if x_1 <= p_t
+                x_1 = gpuArray.rand(1);
+                if x_1<=p_t
                     spin_config = new_spin_config;
 %                     total_energy = Ham_d1(spin_config, HParams, trotter_slices, Temperature, G);
                 end
@@ -89,11 +89,11 @@ function [ solution ] = piqmc(spin_start, HParams, monte_steps, trotter_slices, 
     end
 
     % Get the conf with min energy
-    energies = zeros([trotter_slices,1]);
+    energies = zeros([trotter_slices,1],'double','gpuArray');
     % test = spin_config(1,:);
     % x = Conf_energy(spin_config(1,:), HParams);
     for i = 1:trotter_slices;
-        energies(i) = Conf_energy(spin_config(i,:),HParams);
+        energies(i) = Conf_energy_gpu(spin_config(i,:),HParams);
     end
     
     
