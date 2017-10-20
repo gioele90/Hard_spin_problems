@@ -21,11 +21,9 @@ epsilon=4/num_spins;
 
 failedSA=find(problems.timeSA==-Inf);
 failedPIQMC=find(problems.timePIQMC==-Inf);
-
-counter_SA=zeros(1,1000);
-counter_PIQMC=zeros(1,1000);
     
 for k=1:length(failedSA)
+    counter_SA=zeros(1,1000);
     hParams=problems.hamiltonian{failedSA(k)};
     gs_energy=problems.gs(failedSA(k));
     starting_conf=(round(rand(1,num_spins)).*2-1);
@@ -44,6 +42,7 @@ for k=1:length(failedSA)
     end
 end
 for k=1:length(failedPIQMC)
+    counter_PIQMC=zeros(1,1000);
     hParams=problems.hamiltonian{failedPIQMC(k)};
     gs_energy=problems.gs(failedPIQMC(k));
     starting_conf=(round(rand(1,num_spins)).*2-1);
