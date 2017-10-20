@@ -1,6 +1,6 @@
 function problems=Gioele_test_annealers(locality,nspins,nloops,nprobs)
 t=tic();
-%rng(1); %Seed random number generator
+rng(2); %Seed random number generator
 loc=locality;
 num_spins=nspins;
 num_loops=nloops;
@@ -16,6 +16,8 @@ problems.gs=zeros(1,num_problems);
 problems.timeSA=zeros(1,num_problems);
 problems.timePIQMC=zeros(1,num_problems);
 problems.probPIQMC=zeros(1,num_problems);
+problems.probSA=zeros(1,num_problems);
+%% 2-local
 if loc==2
 % Annealing parameters
 init_temp_SA=1e29;
@@ -70,6 +72,7 @@ for k=1:num_problems
     end
     probSA=sum(counter_SA)/100;
     problems.timeSA(k)=iterations_SA*flipsPerTemp_SA*log(0.01)/log(1-min(0.99,probSA));
+    problems.probSA(k)=probSA;
     parfor i=1:100
         solution_PIQMC=piqmc(starting_conf, hParams, iterations_PIQMC, trotterSlices,...
             Ginitial, temperature_PIQMC, step_flips_PIQMC);
@@ -87,13 +90,15 @@ for k=1:num_problems
         disp(strcat('Problem ',int2str(k)));
     end
 end
+
+%% 3-local
 elseif loc==3
 % Annealing parameters
 
 init_temp_SA=1e29;
 final_temp_SA=0;
 spin_StepSize_SA=1;
-iterations_SA=100;
+iterations_SA=300;
 flipsPerTemp_SA=5;
 
 iterations_PIQMC=350;
@@ -108,7 +113,7 @@ num_spins=lattice_length^2;
 problems.solution=zeros(num_problems,num_spins);
 
 for k=1:num_problems
-    counter_SA=zeros(1,100);
+    counter_SA=zeros(1,1000);
     counter_PIQMC=zeros(1,100);
     for i=1:num_loops
         loops{i}=random_walk_loop_3(adj);
@@ -122,15 +127,16 @@ for k=1:num_problems
     hParams={h,0,0,J,0,0,0};
     gs_energy=Conf_energy(spinconfig,hParams);
     starting_conf=(round(rand(1,num_spins)).*2-1);
-    parfor i=1:100
+    parfor i=1:1000
         solution_SA=simulatedAnnealing(hParams, starting_conf, init_temp_SA, final_temp_SA, ...
             spin_StepSize_SA, iterations_SA, 'exponential', flipsPerTemp_SA);
         if (solution_SA{1}-gs_energy)<epsilon
             counter_SA(i)=1;
         end
     end
-    probSA=sum(counter_SA)/100;
+    probSA=sum(counter_SA)/1000;
     problems.timeSA(k)=iterations_SA*flipsPerTemp_SA*log(0.01)/log(1-min(0.99,probSA));
+    problems.probSA(k)=probSA;
     parfor i=1:100
         solution_PIQMC=piqmc(starting_conf, hParams, iterations_PIQMC, trotterSlices,...
             Ginitial, temperature_PIQMC, step_flips_PIQMC);
@@ -148,6 +154,8 @@ for k=1:num_problems
         disp(strcat('Problem ',int2str(k)));
     end
 end
+
+%% 4-local
 elseif loc==4
 % Annealing parameters
 
@@ -188,6 +196,7 @@ for k=1:num_problems
     end
     probSA=sum(counter_SA)/100;
     problems.timeSA(k)=iterations_SA*flipsPerTemp_SA*log(0.01)/log(1-min(0.99,probSA));
+    problems.probSA(k)=probSA;
     parfor i=1:100
         solution_PIQMC=piqmc(starting_conf, hParams, iterations_PIQMC, trotterSlices,...
             Ginitial, temperature_PIQMC, step_flips_PIQMC);
