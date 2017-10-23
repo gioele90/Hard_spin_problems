@@ -27,7 +27,7 @@ function [ solution ] = piqmc(spin_start, HParams, monte_steps, trotter_slices, 
 %     energyFunction(spin_config(1,:))
     
     tic;
-    for k = 1:monte_steps
+    for k = 1:monte_steps;
         %disp(k);
         %sprintf('k=%d',k)
 %         if toc > 1
