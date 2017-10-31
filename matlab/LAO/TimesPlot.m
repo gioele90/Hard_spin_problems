@@ -1,7 +1,7 @@
-% timeSA2locvals=problems2loc.timeSA;
-% timePIQMC2locvals=problems2loc.timePIQMC;
-% timeSA3locvals=problems3loc.timeSA;
-% timePIQMC3locvals=problems3loc.timePIQMC;
+timeSA2locvals=problems2loc.timeSA;
+timePIQMC2locvals=problems2loc.timePIQMC;
+timeSA3locvals=problems3loc.timeSA;
+timePIQMC3locvals=problems3loc.timePIQMC;
 timeSA2locvals=timeSA2locvals./48; %conversion between spin updates and sweeps
 timePIQMC2locvals=timePIQMC2locvals./48;
 timeSA3locvals=timeSA3locvals./49;

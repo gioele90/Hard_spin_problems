@@ -265,9 +265,9 @@ for k=1:num_problems
     problems.hamiltonian{k}=hParams;
     problems.solution(k,:)=spinconfig';
     problems.gs(k)=gs_energy;
-%     if mod(k,10)==0
+    if mod(k,10)==0
         disp(strcat('Problem ',int2str(k)));
-%     end
+    end
 end
 end
 problems.runtime=toc(t);
