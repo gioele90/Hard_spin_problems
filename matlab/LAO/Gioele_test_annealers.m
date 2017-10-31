@@ -32,31 +32,33 @@ if loc==2
 % temperature_PIQMC=0.05;
 % step_flips_PIQMC=1;
 
-%Degenerate
-init_temp_SA=1e27;
-final_temp_SA=750;
+%32 spins
+iterations_SA=60;
+init_temp_SA=1e28;
+final_temp_SA=4000;
 spin_StepSize_SA=1;
-iterations_SA=250;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=300;
-trotterSlices=30;
-Ginitial=1.3;
+iterations_PIQMC=100;
+Ginitial=1.35;
 temperature_PIQMC=0.05;
 step_flips_PIQMC=1;
+trotterSlices=30;
 
-%96 spins
-% init_temp_SA=1e29;
-% final_temp_SA=0;
+%Degenerate
+% init_temp_SA=1e27;
+% final_temp_SA=750;
 % spin_StepSize_SA=1;
-% iterations_SA=300;
+% iterations_SA=250;
 % flipsPerTemp_SA=5;
 % 
-% iterations_PIQMC=1000;
+% iterations_PIQMC=300;
 % trotterSlices=30;
-% Ginitial=1.2;
+% Ginitial=1.3;
 % temperature_PIQMC=0.05;
 % step_flips_PIQMC=1;
+
+
 
 if mod(num_spins,8)
     disp('Use a number of spins which is a multiple of 8');
@@ -81,13 +83,13 @@ for k=1:num_problems
         loops{i}=random_walk_loop_2(adj);
     end
     spinconfig=(round(rand(1,num_spins)).*2-1);
-    %h=-spinconfig.*4./num_spins;
+    h=-spinconfig.*4./num_spins;
     [J,~]=planted_hamiltonian_2(spinconfig,loops);
     nonzeros=find(J);
     [sub,~]=ind2sub(size(J),nonzeros);
     problems.coupledspins(k)=length(unique(sub));
-    %hParams={h,J,0,0,0,0,0};
-    hParams={0,J,0,0,0,0,0};
+    hParams={h,J,0,0,0,0,0};
+    %hParams={0,J,0,0,0,0,0};
     gs_energy=Conf_energy(spinconfig,hParams);
     starting_conf=(round(rand(1,num_spins)).*2-1);
     parfor i=1:100
@@ -134,27 +136,27 @@ elseif loc==3
 % temperature_PIQMC=0.05;
 % step_flips_PIQMC=1;
 
-%Degenerate
-init_temp_SA=1e29;
+%36 spins
+iterations_SA=40;
+init_temp_SA=1e30;
 final_temp_SA=0;
 spin_StepSize_SA=1;
-iterations_SA=100;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=400;
-trotterSlices=30;
-Ginitial=1.3;
+iterations_PIQMC=350;
+Ginitial=1.4;
 temperature_PIQMC=0.05;
 step_flips_PIQMC=1;
+trotterSlices=30;
 
-%100 spins
+%Degenerate
 % init_temp_SA=1e29;
 % final_temp_SA=0;
 % spin_StepSize_SA=1;
-% iterations_SA=300;
+% iterations_SA=100;
 % flipsPerTemp_SA=5;
 % 
-% iterations_PIQMC=1000;
+% iterations_PIQMC=400;
 % trotterSlices=30;
 % Ginitial=1.3;
 % temperature_PIQMC=0.05;
@@ -172,13 +174,13 @@ for k=1:num_problems
         loops{i}=random_walk_loop_3(adj);
     end
     spinconfig=(round(rand(1,num_spins)).*2-1);
-    %h=-spinconfig.*4./num_spins;
+    h=-spinconfig.*4./num_spins;
     [J,~]=planted_hamiltonian_3(spinconfig,loops);
     nonzeros=find(J);
     [sub,~,~]=ind2sub(size(J),nonzeros);
     problems.coupledspins(k)=length(unique(sub));
-    %hParams={h,0,0,J,0,0,0};
-    hParams={0,0,0,J,0,0,0};
+    hParams={h,0,0,J,0,0,0};
+    %hParams={0,0,0,J,0,0,0};
     gs_energy=Conf_energy(spinconfig,hParams);
     starting_conf=(round(rand(1,num_spins)).*2-1);
     parfor i=1:100

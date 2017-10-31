@@ -1,12 +1,12 @@
 function time=tweak_annealers(annealern,paramn,range,locality,nspins,nloops,nprobs,seed)
-iterations_SA=100;
-init_temp_SA=1e29;
-final_temp_SA=1000;
+iterations_SA=40;
+init_temp_SA=1e30;
+final_temp_SA=0;
 spin_StepSize_SA=1;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=300;
-Ginitial=1.3;
+iterations_PIQMC=350;
+Ginitial=1.4;
 temperature_PIQMC=0.05;
 step_flips_PIQMC=1;
 trotterSlices=30;
@@ -19,7 +19,6 @@ epsilon=4/num_spins;
 loops=cell(1,num_loops);
 time=zeros(length(range),num_problems);
 time_avg=zeros(1,length(range));
-rng(seed);
 
 if annealern==1
     param(1)=iterations_SA;
@@ -29,6 +28,7 @@ if annealern==1
     param(5)=flipsPerTemp_SA;
     for i=1:length(range)
         param(paramn)=range(i);
+        rng(seed);
         if loc==2
             if mod(num_spins,8)
                 disp('Use a number of spins which is a multiple of 8');
@@ -50,10 +50,10 @@ if annealern==1
                 loops{m}=random_walk_loop_2(adj);
             end
             spinconfig=(round(rand(1,num_spins)).*2-1);
-            %h=-spinconfig.*4./num_spins;
+            h=-spinconfig.*4./num_spins;
             [J,~]=planted_hamiltonian_2(spinconfig,loops);
-            %hParams={h,J,0,0,0,0,0};
-            hParams={0,J,0,0,0,0,0};
+            hParams={h,J,0,0,0,0,0};
+            %hParams={0,J,0,0,0,0,0};
             gs_energy=Conf_energy(spinconfig,hParams);
             starting_conf=(round(rand(1,num_spins)).*2-1);
             parfor j=1:100
@@ -71,14 +71,15 @@ if annealern==1
             adj=nearestNeighbourAdj3local(lattice_length,lattice_length);
             num_spins=lattice_length^2;
             for k=1:num_problems
+                counter_SA=zeros(1,100);
                 for m=1:num_loops
                     loops{m}=random_walk_loop_3(adj);
                 end
                 spinconfig=(round(rand(1,num_spins)).*2-1);
-                %h=-spinconfig.*4./num_spins;
+                h=-spinconfig.*4./num_spins;
                 [J,~]=planted_hamiltonian_3(spinconfig,loops);
-                %hParams={h,0,0,J,0,0,0};
-                hParams={0,0,0,J,0,0,0};
+                hParams={h,0,0,J,0,0,0};
+                %hParams={0,0,0,J,0,0,0};
                 gs_energy=Conf_energy(spinconfig,hParams);
                 starting_conf=(round(rand(1,num_spins)).*2-1);
                 parfor j=1:100
@@ -101,6 +102,7 @@ elseif annealern==2
     param(5)=trotterSlices;
     for i=1:length(range)
         param(paramn)=range(i);
+        rng(seed);
         if loc==2
             if mod(num_spins,8)
                 disp('Use a number of spins which is a multiple of 8');
@@ -143,6 +145,7 @@ elseif annealern==2
             adj=nearestNeighbourAdj3local(lattice_length,lattice_length);
             num_spins=lattice_length^2;
             for k=1:num_problems
+                counter_PIQMC=zeros(1,100);
                 for m=1:num_loops
                     loops{m}=random_walk_loop_3(adj);
                 end
