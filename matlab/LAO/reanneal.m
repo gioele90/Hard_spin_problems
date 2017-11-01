@@ -1,17 +1,17 @@
 function problems_out=reanneal(problems)
 t=tic();
 
-init_temp_SA=1e29;
-final_temp_SA=0;
+iterations_SA=20;
+init_temp_SA=1e26;
+final_temp_SA=4000;
 spin_StepSize_SA=1;
-iterations_SA=600;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=350;
-trotterSlices=30;
-Ginitial=1.3;
-temperature_PIQMC=0.05;
+iterations_PIQMC=100;
+Ginitial=1.34;
+temperature_PIQMC=0.046;
 step_flips_PIQMC=1;
+trotterSlices=30;
 
 problems_out=problems;
 hampar=problems.hamiltonian{1};
