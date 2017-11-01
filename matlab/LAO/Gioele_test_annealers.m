@@ -295,6 +295,8 @@ for k=1:num_problems
 end
 end
 problems.runtime=toc(t);
-filename=strcat(int2str(num_problems),'_problems_',int2str(num_spins),'_spins_',int2str(loc),'local_degenerate_',datestr(now,30),'.mat');
+filename=strcat(int2str(num_problems),'_problems_',int2str(num_spins),'_spins_',int2str(loc),'local_',datestr(now,30),'.mat');
+%filename=strcat(int2str(num_problems),'_problems_',int2str(num_spins),'_spins_',int2str(loc),'local_degenerate_',datestr(now,30),'.mat');
+save(filename,'problems')
 save(filename,'problems')
 end

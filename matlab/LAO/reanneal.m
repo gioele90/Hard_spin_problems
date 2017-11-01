@@ -15,8 +15,8 @@ trotterSlices=30;
 
 problems_out=problems;
 hampar=problems.hamiltonian{1};
-% num_spins=length(hampar{4});
-num_spins=length(hampar{2});
+num_spins=length(hampar{4});
+% num_spins=length(hampar{2});
 epsilon=4/num_spins;
 
 failedSA=find(problems.timeSA==-Inf);
@@ -61,6 +61,7 @@ for k=1:length(failedPIQMC)
     end
 end
 problems_out.runtime=toc(t);
-filename=strcat(int2str(problems.nproblems),'_problems_',int2str(num_spins),'_spins_',int2str(problems.locality),'local_degenerate',datestr(now,30),'_reannealed','.mat');
+filename=strcat(int2str(problems.nproblems),'_problems_',int2str(num_spins),'_spins_',int2str(problems.locality),'local_',datestr(now,30),'_reannealed','.mat');
+%filename=strcat(int2str(problems.nproblems),'_problems_',int2str(num_spins),'_spins_',int2str(problems.locality),'local_degenerate_',datestr(now,30),'_reannealed','.mat');
 save(filename,'problems_out')
 end
