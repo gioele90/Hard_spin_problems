@@ -1,13 +1,13 @@
 function time=tweak_annealers(annealern,paramn,range,locality,nspins,nloops,nprobs,seed)
-iterations_SA=20;
-init_temp_SA=1e26;
+iterations_SA=60;
+init_temp_SA=1e28;
 final_temp_SA=4000;
 spin_StepSize_SA=1;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=100;
-Ginitial=1.34;
-temperature_PIQMC=0.046;
+iterations_PIQMC=250;
+Ginitial=1.25;
+temperature_PIQMC=0.05;
 step_flips_PIQMC=1;
 trotterSlices=30;
 
