@@ -52,7 +52,7 @@ final_temp_SA=0;
 spin_StepSize_SA=1;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=50;
+iterations_PIQMC=90;
 Ginitial=1.42;
 temperature_PIQMC=0.05;
 step_flips_PIQMC=1;

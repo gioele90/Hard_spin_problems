@@ -5,8 +5,8 @@ final_temp_SA=4000;
 spin_StepSize_SA=1;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=250;
-Ginitial=1.25;
+iterations_PIQMC=90;
+Ginitial=1.42;
 temperature_PIQMC=0.05;
 step_flips_PIQMC=1;
 trotterSlices=30;
