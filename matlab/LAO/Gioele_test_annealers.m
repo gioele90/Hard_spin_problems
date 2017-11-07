@@ -46,15 +46,28 @@ if loc==2
 % trotterSlices=30;
 
 %16 spins
-iterations_SA=20;
-init_temp_SA=5e31;
-final_temp_SA=0;
+% iterations_SA=20;
+% init_temp_SA=5e31;
+% final_temp_SA=0;
+% spin_StepSize_SA=1;
+% flipsPerTemp_SA=5;
+% 
+% iterations_PIQMC=90;
+% Ginitial=1.42;
+% temperature_PIQMC=0.05;
+% step_flips_PIQMC=1;
+% trotterSlices=30;
+
+%24 spins
+iterations_SA=22;
+init_temp_SA=5e30;
+final_temp_SA=4000;
 spin_StepSize_SA=1;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=90;
-Ginitial=1.42;
-temperature_PIQMC=0.05;
+iterations_PIQMC=100;
+Ginitial=1.32;
+temperature_PIQMC=0.046;
 step_flips_PIQMC=1;
 trotterSlices=30;
 
@@ -79,13 +92,30 @@ chimera_blocks=num_spins/8;
 if floor(sqrt(chimera_blocks))==sqrt(chimera_blocks)
     chimera_side=sqrt(chimera_blocks);
     adj=chimeraAdj(chimera_side,chimera_side);
-    num_spins=chimera_side^2*8;
+    % num_spins=chimera_side^2*8;
     problems.solution=zeros(num_problems,num_spins);
 else
-    chimera_side=floor(sqrt(chimera_blocks));
-    adj=chimeraAdj(chimera_side+1,chimera_side);
-    num_spins=(chimera_side^2+chimera_side)*8;
-    problems.solution=zeros(num_problems,num_spins);
+    factors=factor(chimera_blocks);
+    faclen=length(factors);
+    if ~mod(faclen,2)
+        side1=prod(factors(1:faclen/2));
+        side2=prod(factors(faclen/2+1:end));
+        % chimera_side=floor(sqrt(chimera_blocks));
+        % adj=chimeraAdj(chimera_side+1,chimera_side);
+        adj=chimeraAdj(side1,side2);
+        % num_spins=(chimera_side^2+chimera_side)*8;
+        problems.solution=zeros(num_problems,num_spins);
+    else
+        if faclen==1
+            adj=chimeraAdj(1,chimera_blocks);
+            problems.solution=zeros(num_problems,num_spins);
+        else
+            side1=prod(factors(1:floor(faclen/2)));
+            side2=prod(factors(ceil(faclen/2):end));
+            adj=chimeraAdj(side1,side2);
+            problems.solution=zeros(num_problems,num_spins);
+        end
+    end
 end
 for k=1:num_problems
     counter_SA=zeros(1,100);
@@ -147,15 +177,28 @@ elseif loc==3
 % temperature_PIQMC=0.05;
 % step_flips_PIQMC=1;
 
-%16 spins
-iterations_SA=20;
-init_temp_SA=1e26;
-final_temp_SA=4000;
+% 16 spins
+% iterations_SA=20;
+% init_temp_SA=1e26;
+% final_temp_SA=4000;
+% spin_StepSize_SA=1;
+% flipsPerTemp_SA=5;
+% 
+% iterations_PIQMC=100;
+% Ginitial=1.34;
+% temperature_PIQMC=0.046;
+% step_flips_PIQMC=1;
+% trotterSlices=30;
+
+% 25 spins
+iterations_SA=30;
+init_temp_SA=5e30;
+final_temp_SA=7000;
 spin_StepSize_SA=1;
 flipsPerTemp_SA=5;
 
-iterations_PIQMC=100;
-Ginitial=1.34;
+iterations_PIQMC=220;
+Ginitial=1.14;
 temperature_PIQMC=0.046;
 step_flips_PIQMC=1;
 trotterSlices=30;
